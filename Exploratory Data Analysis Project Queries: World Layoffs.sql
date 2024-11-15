@@ -1,7 +1,7 @@
 
 
 -- Exploratory Data Analysis
-
+-- In this analysis, we will explore data on company layoffs from 2020 to 2023 to identify trends and gain insights
 
 
 
