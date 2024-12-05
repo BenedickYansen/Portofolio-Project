@@ -6,6 +6,8 @@
 
 -------------------- DATA PREPARATION ------------------------------
 
+--------------------------------------------------------------------
+
 -- DROP DATABASE IF EXISTS `bank_marketing`;
 -- CREATE DATABASE `bank_marketing`;
 -- USE `bank_marketing`;
