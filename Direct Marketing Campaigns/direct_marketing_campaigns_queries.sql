@@ -71,6 +71,7 @@ FROM mcampaign_staging
 GROUP BY job
 ORDER BY total_clients DESC;
 
+
 -- Count the number of contacts made
 SELECT SUM(campaign) AS total_contacts_made
 FROM mcampaign_staging;
@@ -87,7 +88,6 @@ ORDER BY age_total DESC;
 SELECT `default`, COUNT(*) AS total_default
 FROM mcampaign_staging
 GROUP BY `default`;
-
 
 
 -- Identifying how many clients have housing credit
