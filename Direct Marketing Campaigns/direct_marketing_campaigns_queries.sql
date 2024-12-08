@@ -55,9 +55,15 @@ ALTER TABLE mcampaign_staging RENAME COLUMN y TO target_response;
 --------------------------------------------------------------
 
 
--- Viewing the first 50 rows
+-- Viewing the first 100 rows
 SELECT * FROM mcampaign_staging
 LIMIT 100;
+
+
+-- Count the number of clients
+SELECT COUNT(*) AS total_clients
+FROM mcampaign_staging;
+
 
 -- Count the number of clients based on job type
 SELECT job, COUNT(*) AS total_clients
@@ -65,16 +71,24 @@ FROM mcampaign_staging
 GROUP BY job
 ORDER BY total_clients DESC;
 
+-- Count the number of contacts made
+SELECT SUM(campaign) AS total_contacts_made
+FROM mcampaign_staging;
+
+
 -- Client Age Distribution
 SELECT age, COUNT(*) age_total
 FROM mcampaign_staging
 GROUP BY age
 ORDER BY age_total DESC;
 
+
 -- Identifying how many clients have defaulted credit
 SELECT `default`, COUNT(*) AS total_default
 FROM mcampaign_staging
 GROUP BY `default`;
+
+
 
 -- Identifying how many clients have housing credit
 SELECT housing, COUNT(*) AS total_housing
@@ -86,20 +100,18 @@ SELECT `default`, AVG(balance) AS average_balance
 FROM mcampaign_staging
 GROUP BY `default`;
 
--- Identifying relationship between balance dan housing credit
-SELECT housing, AVG(balance) AS average_balance
-FROM mcampaign_staging
-GROUP BY housing;
 
 -- Identifying relationship between balance dan housing credit
 SELECT housing, AVG(balance) AS average_balance
 FROM mcampaign_staging
 GROUP BY housing;
+
 
 -- Examining whether the duration of contact influences the success of the campaign
 SELECT target_response, AVG(duration) AS avg_contact_duration
 FROM mcampaign_staging
 GROUP BY target_response;
+
 
 -- Evaluating the campaign results based on the outcome of the previous marketing campaign (poutcome)
 SELECT poutcome, COUNT(*) AS total_success_poutcome	,
@@ -107,10 +119,12 @@ SUM(CASE WHEN target_response = 'yes' THEN 1 ELSE 0 END ) AS successful_subscrip
 FROM mcampaign_staging 
 GROUP BY poutcome;
 
+
 -- Correlation between credit status and campaign outcomes
 SELECT `default`, target_response, COUNT(*) AS total
 FROM mcampaign_staging
 GROUP BY 1, 2;
+
 
 -- Analyzing the success rate of the campaign based on clients job
 SELECT job, target_response, COUNT(*) AS total
@@ -118,11 +132,28 @@ FROM mcampaign_staging
 GROUP BY 1, 2
 ORDER BY target_response DESC, total DESC;
 
+
+-- Total number of the subscription from the current campaign 
+SELECT target_response, COUNT(*) AS total
+FROM mcampaign_staging
+WHERE target_response = 'yes'
+GROUP BY 1
+ORDER BY target_response DESC;
+
+
+-- Subscription rate from the current campaign based on clients job
+SELECT job,
+ROUND(((SUM(CASE WHEN target_response = 'yes' THEN 1 ELSE 0 END) * 100.0 / COUNT(*))),2) AS subscription_rate
+FROM mcampaign_staging
+GROUP BY job;
+
+
 -- Correlation between number of contacts performed during this campaign and for this client with campaign's success
 SELECT campaign, COUNT(*) AS total, 
 SUM(CASE WHEN target_response = 'yes' THEN 1 ELSE 0 END) AS successful_subscriptions
 FROM mcampaign_staging
 GROUP BY campaign;
+
 
 -- Are clients with higher balances and longer contact durations more likely to subscribe to term deposit products?
 SELECT age, job, balance, duration, target_response
