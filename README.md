@@ -1,4 +1,4 @@
-***[https://www.linkedin.com/in/benedickyansen/]***
+***(https://www.linkedin.com/in/benedickyansen/)***
 
 ***[https://public.tableau.com/app/profile/benedick.yansen]***
 
